@@ -1,0 +1,7 @@
+package guru.springframeword.sfgrecipes.repositories;
+
+import guru.springframeword.sfgrecipes.domain.UnitOfMeasure;
+import org.springframework.data.repository.CrudRepository;
+
+public interface UnitOfMeasureRepository extends CrudRepository<UnitOfMeasure, Long> {
+}
