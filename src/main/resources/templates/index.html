@@ -20,45 +20,42 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h1>My Recipes!</h1>
-                </div>
-                <div class="panel-body" th:each="recipe : ${recipes}">
 
-                    <h2 th:text="${recipe.getDescription()}">Recipe</h2>
-                    <div class="table-responsive">
+                <div class="panel-heading">
+                    <h1 class="panel-title">My Recipes!</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive" th:if="${not#lists.isEmpty(recipes)}">
                         <table class="table table-hover">
                             <thead class="thead-inverse">
                             <tr>
-                                <th>Difficulty</th>
-                                <th>Prep Time</th>
-                                <th>Cook Time</th>
-                                <th>Total Time</th>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>View</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td th:text="${recipe.getDifficulty()}">DIFF</td>
-                                <td th:text="${recipe.getPrepTime()} + ' minutes'">NN minutes</td>
-                                <td th:text="${recipe.getCookTime()} + ' minutes'">NN minutes</td>
-                                <td th:text="${recipe.getCookTime()+recipe.getPrepTime()} + ' minutes'">NN minutes</td>
-                                <td>
-                                </td>
+                            <tr th:remove="all">
+                                <td>123</td>
+                                <td>Tasty Goodness 1</td>
+                                <td><a href="#">View</a></td>
                             </tr>
-                            </tbody>
+                            <tr th:remove="all">
+                                <td>123</td>
+                                <td>Tasty Goodness 2</td>
+                                <td><a href="#">View</a></td>
+                            </tr>
+                            <tr th:remove="all">
+                                <td>123</td>
+                                <td>Tasty Goodness 3</td>
+                                <td><a href="#">View</a></td>
+                            </tr>
+                            <tr th:each="recipe : ${recipes}">
+                                <td th:text="${recipe.id}">334</td>
+                                <td th:text="${recipe.description} + ' minutes'">Tasty Goodness 4</td>
+                                <td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
+                            </tr>
                         </table>
                     </div>
-                    <h2>Ingredients:</h2>
-                    <ul>
-                        <li th:each="ingredient : ${recipe.getIngredients()}">
-                            <div th:text="${ingredient.getAmount()} + ' ' + ${ingredient.getUom().getDescription()} + ' ' + ${ingredient.getDescription()}">Ingredient</div>
-                        </li>
-                    </ul>
-                    <h2>Directions:</h2>
-                    <div th:utext="${#strings.replace(recipe.getDirections(), '&#10;','<br />')}">Directions Here</div>
-
-                    <h2>Notes:</h2>
-                    <div th:utext="${#strings.replace(recipe.getNotes().getRecipeNotes(), '&#10;','<br />')}">Notes Here</div>
                 </div>
             </div>
         </div>
