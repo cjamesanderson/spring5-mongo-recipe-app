@@ -112,6 +112,9 @@ public class DataLoader implements CommandLineRunner {
                 "chili, the oregano, and the cumin with 2 1/2 tablespoons regular chili powder, though the flavor " +
                 "won't be quite the same.)"));
 
+        spicyGrilledChickenTacos.setSource("Simple Recipes");
+        spicyGrilledChickenTacos.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
+
         recipeRepository.save(spicyGrilledChickenTacos);
 
         //begin second test recipe
@@ -162,6 +165,9 @@ public class DataLoader implements CommandLineRunner {
                 "Garnish with slices of red radish or jigama strips. Serve with your choice of store-bought tortilla" +
                 " chips or make your own homemade tortilla chips.\n" +
                 "Refrigerate leftover guacamole up to 3 days. ");
+
+        bestGuacamole.setSource("Simply Recipes");
+        bestGuacamole.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
 
         recipeRepository.save(bestGuacamole);
 
