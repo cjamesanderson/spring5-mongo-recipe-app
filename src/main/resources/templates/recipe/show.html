@@ -15,7 +15,9 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7/dist/js/bootstrap.min.js}"></script>
     <style>
-        h5 {font-weight: bold;}
+        h5 {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -36,7 +38,9 @@
                                 <ul>
                                     <li th:remove="all">cat one</li>
                                     <li th:remove="all">cat two</li>
-                                    <li th:each="category : ${recipe.categories}" th:text="${category.description}">cat three</li>
+                                    <li th:each="category : ${recipe.categories}" th:text="${category.description}">cat
+                                        three
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -86,7 +90,15 @@
                 </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title">Ingredients</h1>
+                        <div class="row">
+                            <div class="col-md-11">
+                                <h1 class="panel-title">Ingredients</h1>
+                            </div>
+                            <div class="col-md-1">
+                                <a class="btn btn-default" href="#" th:href="'/recipe/' + ${recipe.id} + '/ingredients'"
+                                   role="button">View</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
@@ -97,7 +109,8 @@
                                     <li th:each="ingredient : ${recipe.ingredients}"
                                         th:text="${ingredient.amount} +
                                         ' ' + ${ingredient.uom.description} +
-                                        ' - ' + ${ingredient.description}">1 Teaspoon of Sugar</li>
+                                        ' - ' + ${ingredient.description}">1 Teaspoon of Sugar
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -110,9 +123,28 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <p th:utext="${#strings.replace(recipe.directions, '&#10;','<br />')}"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu metus a orci varius placerat in et elit. Curabitur felis lacus, gravida vitae cursus sit amet, porta vitae nulla. Nunc blandit justo in egestas maximus. Aenean in tellus iaculis, hendrerit augue nec, convallis neque. Suspendisse malesuada quam augue, ac ultrices tellus aliquet ut. Suspendisse sagittis dolor quis eros eleifend, sit amet fringilla orci vestibulum. Donec ac sapien porta, pulvinar arcu ut, facilisis velit. Suspendisse egestas diam ut sem mattis mollis. Nunc laoreet mattis arcu, eget euismod orci condimentum in. Duis est ligula, semper vitae erat id, molestie auctor neque. Vestibulum elementum eleifend posuere. Donec efficitur sit amet nibh sed volutpat. Sed nibh nisl, suscipit vel facilisis vitae, pretium vel turpis. Vestibulum scelerisque interdum egestas. Proin cursus diam orci, ac sagittis augue euismod eu. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                <p th:utext="${#strings.replace(recipe.directions, '&#10;','<br />')}"> Lorem ipsum
+                                    dolor sit amet, consectetur adipiscing elit. Nulla eu metus a orci varius placerat
+                                    in et elit. Curabitur felis lacus, gravida vitae cursus sit amet, porta vitae nulla.
+                                    Nunc blandit justo in egestas maximus. Aenean in tellus iaculis, hendrerit augue
+                                    nec, convallis neque. Suspendisse malesuada quam augue, ac ultrices tellus aliquet
+                                    ut. Suspendisse sagittis dolor quis eros eleifend, sit amet fringilla orci
+                                    vestibulum. Donec ac sapien porta, pulvinar arcu ut, facilisis velit. Suspendisse
+                                    egestas diam ut sem mattis mollis. Nunc laoreet mattis arcu, eget euismod orci
+                                    condimentum in. Duis est ligula, semper vitae erat id, molestie auctor neque.
+                                    Vestibulum elementum eleifend posuere. Donec efficitur sit amet nibh sed volutpat.
+                                    Sed nibh nisl, suscipit vel facilisis vitae, pretium vel turpis. Vestibulum
+                                    scelerisque interdum egestas. Proin cursus diam orci, ac sagittis augue euismod eu.
+                                    Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus
+                                    mus.
 
-                                    Maecenas imperdiet felis urna, id venenatis leo elementum vel. Sed et molestie nulla. Aliquam ornare nisi a odio porttitor lacinia. Nam elit nibh, congue at luctus ornare, sollicitudin quis neque. Donec aliquet porta tristique. Cras sapien lacus, aliquet aliquet pharetra quis, blandit in tellus. Cras facilisis lorem a augue consectetur posuere in non dolor. Phasellus posuere purus sit amet leo tincidunt, vel finibus quam imperdiet. Etiam dignissim mauris fringilla, mattis lectus placerat, auctor ex. </p>
+                                    Maecenas imperdiet felis urna, id venenatis leo elementum vel. Sed et molestie
+                                    nulla. Aliquam ornare nisi a odio porttitor lacinia. Nam elit nibh, congue at luctus
+                                    ornare, sollicitudin quis neque. Donec aliquet porta tristique. Cras sapien lacus,
+                                    aliquet aliquet pharetra quis, blandit in tellus. Cras facilisis lorem a augue
+                                    consectetur posuere in non dolor. Phasellus posuere purus sit amet leo tincidunt,
+                                    vel finibus quam imperdiet. Etiam dignissim mauris fringilla, mattis lectus
+                                    placerat, auctor ex. </p>
                             </div>
                         </div>
                     </div>
@@ -124,9 +156,28 @@
                     <div class="panel-body">
                         <div class panel="row">
                             <div class="col-md-12">
-                                <p th:utext="${#strings.replace(recipe.notes.recipeNotes, '&#10;','<br />')}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu metus a orci varius placerat in et elit. Curabitur felis lacus, gravida vitae cursus sit amet, porta vitae nulla. Nunc blandit justo in egestas maximus. Aenean in tellus iaculis, hendrerit augue nec, convallis neque. Suspendisse malesuada quam augue, ac ultrices tellus aliquet ut. Suspendisse sagittis dolor quis eros eleifend, sit amet fringilla orci vestibulum. Donec ac sapien porta, pulvinar arcu ut, facilisis velit. Suspendisse egestas diam ut sem mattis mollis. Nunc laoreet mattis arcu, eget euismod orci condimentum in. Duis est ligula, semper vitae erat id, molestie auctor neque. Vestibulum elementum eleifend posuere. Donec efficitur sit amet nibh sed volutpat. Sed nibh nisl, suscipit vel facilisis vitae, pretium vel turpis. Vestibulum scelerisque interdum egestas. Proin cursus diam orci, ac sagittis augue euismod eu. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                <p th:utext="${#strings.replace(recipe.notes.recipeNotes, '&#10;','<br />')}">Lorem
+                                    ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu metus a orci varius
+                                    placerat in et elit. Curabitur felis lacus, gravida vitae cursus sit amet, porta
+                                    vitae nulla. Nunc blandit justo in egestas maximus. Aenean in tellus iaculis,
+                                    hendrerit augue nec, convallis neque. Suspendisse malesuada quam augue, ac ultrices
+                                    tellus aliquet ut. Suspendisse sagittis dolor quis eros eleifend, sit amet fringilla
+                                    orci vestibulum. Donec ac sapien porta, pulvinar arcu ut, facilisis velit.
+                                    Suspendisse egestas diam ut sem mattis mollis. Nunc laoreet mattis arcu, eget
+                                    euismod orci condimentum in. Duis est ligula, semper vitae erat id, molestie auctor
+                                    neque. Vestibulum elementum eleifend posuere. Donec efficitur sit amet nibh sed
+                                    volutpat. Sed nibh nisl, suscipit vel facilisis vitae, pretium vel turpis.
+                                    Vestibulum scelerisque interdum egestas. Proin cursus diam orci, ac sagittis augue
+                                    euismod eu. Orci varius natoque penatibus et magnis dis parturient montes, nascetur
+                                    ridiculus mus.
 
-                                    Maecenas imperdiet felis urna, id venenatis leo elementum vel. Sed et molestie nulla. Aliquam ornare nisi a odio porttitor lacinia. Nam elit nibh, congue at luctus ornare, sollicitudin quis neque. Donec aliquet porta tristique. Cras sapien lacus, aliquet aliquet pharetra quis, blandit in tellus. Cras facilisis lorem a augue consectetur posuere in non dolor. Phasellus posuere purus sit amet leo tincidunt, vel finibus quam imperdiet. Etiam dignissim mauris fringilla, mattis lectus placerat, auctor ex. </p>
+                                    Maecenas imperdiet felis urna, id venenatis leo elementum vel. Sed et molestie
+                                    nulla. Aliquam ornare nisi a odio porttitor lacinia. Nam elit nibh, congue at luctus
+                                    ornare, sollicitudin quis neque. Donec aliquet porta tristique. Cras sapien lacus,
+                                    aliquet aliquet pharetra quis, blandit in tellus. Cras facilisis lorem a augue
+                                    consectetur posuere in non dolor. Phasellus posuere purus sit amet leo tincidunt,
+                                    vel finibus quam imperdiet. Etiam dignissim mauris fringilla, mattis lectus
+                                    placerat, auctor ex. </p>
                             </div>
                         </div>
                     </div>
