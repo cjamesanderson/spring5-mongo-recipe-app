@@ -25,23 +25,26 @@ public class Notes {
         return id;
     }
 
-    public void setId(Long id) {
+    public Notes setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public Recipe getRecipe() {
         return recipe;
     }
 
-    public void setRecipe(Recipe recipe) {
+    public Notes setRecipe(Recipe recipe) {
         this.recipe = recipe;
+        return this;
     }
 
     public String getRecipeNotes() {
         return recipeNotes;
     }
 
-    public void setRecipeNotes(String recipeNotes) {
+    public Notes setRecipeNotes(String recipeNotes) {
         this.recipeNotes = recipeNotes;
+        return this;
     }
 }

@@ -1,20 +1,29 @@
 package guru.springframeword.sfgrecipes.services;
 
+import guru.springframeword.sfgrecipes.commands.RecipeCommand;
+import guru.springframeword.sfgrecipes.converters.RecipeCommandToRecipe;
+import guru.springframeword.sfgrecipes.converters.RecipeToRecipeCommand;
 import guru.springframeword.sfgrecipes.domain.Recipe;
 import guru.springframeword.sfgrecipes.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+
 @Service
 public class RecipeServiceImpl implements RecipeService{
 
     private final RecipeRepository recipeRepository;
+    private final RecipeToRecipeCommand recipeToRecipeCommand;
+    private final RecipeCommandToRecipe recipeCommandToRecipe;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeToRecipeCommand recipeToRecipeCommand, RecipeCommandToRecipe recipeCommandToRecipe) {
         this.recipeRepository = recipeRepository;
+        this.recipeToRecipeCommand = recipeToRecipeCommand;
+        this.recipeCommandToRecipe = recipeCommandToRecipe;
     }
 
     public Set<Recipe> getRecipes() {
@@ -33,5 +42,14 @@ public class RecipeServiceImpl implements RecipeService{
         }
 
         return recipeOptional.get();
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand saveRecipeCommand(RecipeCommand command) {
+        Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
+
+        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
+        return recipeToRecipeCommand.convert(savedRecipe);
     }
 }

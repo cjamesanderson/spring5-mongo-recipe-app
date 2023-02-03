@@ -1,6 +1,7 @@
 package guru.springframeword.sfgrecipes.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,29 +13,32 @@ public class Category {
     private String description;
 
     @ManyToMany(mappedBy = "categories")
-    private Set<Recipe> recipes;
+    private Set<Recipe> recipes = new HashSet<>();
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public Category setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public Category setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public Set<Recipe> getRecipes() {
         return recipes;
     }
 
-    public void setRecipes(Set<Recipe> recipes) {
+    public Category setRecipes(Set<Recipe> recipes) {
         this.recipes = recipes;
+        return this;
     }
 }

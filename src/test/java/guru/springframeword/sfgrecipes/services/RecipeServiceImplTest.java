@@ -1,5 +1,6 @@
 package guru.springframeword.sfgrecipes.services;
 
+import guru.springframeword.sfgrecipes.converters.*;
 import guru.springframeword.sfgrecipes.domain.Recipe;
 import guru.springframeword.sfgrecipes.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,16 @@ class RecipeServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository,
+                new RecipeToRecipeCommand(
+                        new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
+                        new NotesToNotesCommand(),
+                        new CategoryToCategoryCommand()),
+                new RecipeCommandToRecipe(
+                        new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
+                        new NotesCommandToNotes(),
+                        new CategoryCommandToCategory()
+                ));
     }
 
     @Test

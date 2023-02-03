@@ -1,44 +1,30 @@
-package guru.springframeword.sfgrecipes.domain;
+package guru.springframeword.sfgrecipes.commands;
 
-import javax.persistence.*;
+import guru.springframeword.sfgrecipes.domain.Difficulty;
+
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-public class Recipe {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RecipeCommand {
     private Long id;
-
     private String description;
     private Integer prepTime;
     private Integer cookTime;
     private Integer servings;
     private String source;
     private String url;
-    @Lob
     private String directions;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Set<Ingredient> ingredients = new HashSet<>();
-    @Lob
+    private Set<IngredientCommand> ingredients = new HashSet<>();
     private Byte[] image;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private Notes notes;
-    @Enumerated(value = EnumType.STRING)
+    private NotesCommand notes;
     private Difficulty difficulty;
-    @ManyToMany
-    @JoinTable(name = "recipe_category",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories = new HashSet<>();
+    private Set<CategoryCommand> categories = new HashSet<>();
 
     public Long getId() {
         return id;
     }
 
-    public Recipe setId(Long id) {
+    public RecipeCommand setId(Long id) {
         this.id = id;
         return this;
     }
@@ -47,7 +33,7 @@ public class Recipe {
         return description;
     }
 
-    public Recipe setDescription(String description) {
+    public RecipeCommand setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -56,7 +42,7 @@ public class Recipe {
         return prepTime;
     }
 
-    public Recipe setPrepTime(Integer prepTime) {
+    public RecipeCommand setPrepTime(Integer prepTime) {
         this.prepTime = prepTime;
         return this;
     }
@@ -65,7 +51,7 @@ public class Recipe {
         return cookTime;
     }
 
-    public Recipe setCookTime(Integer cookTime) {
+    public RecipeCommand setCookTime(Integer cookTime) {
         this.cookTime = cookTime;
         return this;
     }
@@ -74,7 +60,7 @@ public class Recipe {
         return servings;
     }
 
-    public Recipe setServings(Integer servings) {
+    public RecipeCommand setServings(Integer servings) {
         this.servings = servings;
         return this;
     }
@@ -83,7 +69,7 @@ public class Recipe {
         return source;
     }
 
-    public Recipe setSource(String source) {
+    public RecipeCommand setSource(String source) {
         this.source = source;
         return this;
     }
@@ -92,7 +78,7 @@ public class Recipe {
         return url;
     }
 
-    public Recipe setUrl(String url) {
+    public RecipeCommand setUrl(String url) {
         this.url = url;
         return this;
     }
@@ -101,16 +87,16 @@ public class Recipe {
         return directions;
     }
 
-    public Recipe setDirections(String directions) {
+    public RecipeCommand setDirections(String directions) {
         this.directions = directions;
         return this;
     }
 
-    public Set<Ingredient> getIngredients() {
+    public Set<IngredientCommand> getIngredients() {
         return ingredients;
     }
 
-    public Recipe setIngredients(Set<Ingredient> ingredients) {
+    public RecipeCommand setIngredients(Set<IngredientCommand> ingredients) {
         this.ingredients = ingredients;
         return this;
     }
@@ -119,16 +105,16 @@ public class Recipe {
         return image;
     }
 
-    public Recipe setImage(Byte[] image) {
+    public RecipeCommand setImage(Byte[] image) {
         this.image = image;
         return this;
     }
 
-    public Notes getNotes() {
+    public NotesCommand getNotes() {
         return notes;
     }
 
-    public Recipe setNotes(Notes notes) {
+    public RecipeCommand setNotes(NotesCommand notes) {
         this.notes = notes;
         if (notes != null) notes.setRecipe(this);
         return this;
@@ -138,24 +124,17 @@ public class Recipe {
         return difficulty;
     }
 
-    public Recipe setDifficulty(Difficulty difficulty) {
+    public RecipeCommand setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
         return this;
     }
 
-    public Set<Category> getCategories() {
+    public Set<CategoryCommand> getCategories() {
         return categories;
     }
 
-    public Recipe setCategories(Set<Category> categories) {
+    public RecipeCommand setCategories(Set<CategoryCommand> categories) {
         this.categories = categories;
         return this;
     }
-
-    public Recipe addIngredient(Ingredient ingredient) {
-        ingredient.setRecipe(this);
-        ingredients.add(ingredient);
-        return this;
-    }
-
 }
