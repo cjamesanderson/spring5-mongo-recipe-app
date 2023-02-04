@@ -1,6 +1,8 @@
 package guru.springframework.sfgrecipes.controllers;
 
+import guru.springframework.sfgrecipes.commands.IngredientCommand;
 import guru.springframework.sfgrecipes.commands.RecipeCommand;
+import guru.springframework.sfgrecipes.services.IngredientService;
 import guru.springframework.sfgrecipes.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,9 @@ class IngredientControllerTest {
 
     @Mock
     RecipeService recipeService;
+
+    @Mock
+    IngredientService ingredientService;
 
     @InjectMocks
     IngredientController controller;
@@ -46,5 +51,18 @@ class IngredientControllerTest {
 
         //then
         verify(recipeService, times(1)).findCommandById(anyLong());
+    }
+
+    @Test
+    void testShowIngredient() throws Exception {
+        //given
+        IngredientCommand command = new IngredientCommand();
+        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(command);
+
+        //when
+        mockMvc.perform(get("/recipe/1/ingredient/1/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/show"))
+                .andExpect(model().attributeExists("ingredient"));
     }
 }
