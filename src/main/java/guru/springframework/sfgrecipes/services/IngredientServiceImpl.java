@@ -67,7 +67,9 @@ public class IngredientServiceImpl implements IngredientService{
                     .findFirst();
             if (ingredientOptional.isEmpty()) {
                 //add new ingredient
-                recipe.addIngredient(ingredientCommandToIngredient.convert(command));
+                Ingredient ingredientNew = ingredientCommandToIngredient.convert(command);
+                ingredientNew.setRecipe(recipe);
+                recipe.addIngredient(ingredientNew);
             } else {
                 Ingredient ingredientFound = ingredientOptional.get();
                 ingredientFound.setDescription(command.getDescription());
@@ -79,10 +81,21 @@ public class IngredientServiceImpl implements IngredientService{
 
             Recipe recipeSaved = recipeRepository.save(recipe);
 
+            Optional<Ingredient> ingredientOptionalSaved = recipeSaved.getIngredients().stream()
+                    .filter(ingredient -> ingredient.getId().equals(command.getId())).findFirst();
+
+            //check by description
+            if (ingredientOptionalSaved.isEmpty()) {
+                //not totally safe.. but best guess
+                ingredientOptionalSaved = recipeSaved.getIngredients().stream()
+                        .filter(recipeIngredient -> recipeIngredient.getDescription().equals(command.getDescription()))
+                        .filter(recipeIngredient -> recipeIngredient.getAmount().equals(command.getAmount()))
+                        .filter(recipeIngredient -> recipeIngredient.getUom().getId().equals(command.getUom().getId()))
+                        .findFirst();
+            }
+
             //todo: check for fail
-            return ingredientToIngredientCommand.convert(recipeSaved.getIngredients().stream()
-                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
-                    .findFirst().get());
+            return ingredientToIngredientCommand.convert(ingredientOptionalSaved.get());
         }
     }
 }
