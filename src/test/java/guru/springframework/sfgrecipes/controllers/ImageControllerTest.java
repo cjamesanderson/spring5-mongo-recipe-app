@@ -63,6 +63,6 @@ class ImageControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/recipe/1/show"));
 
-        verify(imageService, times(1)).saveImage(anyLong(), any());
+        verify(imageService, times(1)).saveImageFile(anyLong(), any());
     }
 }
