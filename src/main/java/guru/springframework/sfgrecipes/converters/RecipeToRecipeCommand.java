@@ -41,6 +41,7 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
                 .setPrepTime(source.getPrepTime())
                 .setServings(source.getServings())
                 .setSource(source.getSource())
+                .setImage(source.getImage())
                 .setUrl(source.getUrl());
 
         if (source.getCategories() != null && source.getCategories().size() > 0) {
