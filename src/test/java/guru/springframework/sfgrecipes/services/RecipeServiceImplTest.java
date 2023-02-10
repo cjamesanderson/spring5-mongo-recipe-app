@@ -13,7 +13,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.assertNotNull;
 
@@ -82,13 +83,15 @@ class RecipeServiceImplTest {
 
     @Test
     void testGetRecipeIdNotFound() throws Exception {
+        Long recipeId = 1L;
+
         Optional<Recipe> recipeOptional = Optional.empty();
 
         when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
 
         NotFoundException thrown = assertThrows(NotFoundException.class,
-                () -> recipeService.findById(1L), "Expected NotFoundException not thrown.");
+                () -> recipeService.findById(recipeId), "Expected NotFoundException not thrown.");
 
-        assertTrue(thrown.getMessage().contains("Recipe Not Found!"));
+        assertEquals("Recipe Not Found. For ID value: " + recipeId, thrown.getMessage());
     }
 }
