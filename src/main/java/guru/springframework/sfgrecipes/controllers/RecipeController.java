@@ -6,12 +6,17 @@ import guru.springframework.sfgrecipes.services.RecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @RequestMapping("/recipe")
 @Controller
 public class RecipeController {
+
+    private static final String RECIPE_RECEIPEFORM_URL = "recipe/recipeform";
 
     private final RecipeService recipeService;
 
@@ -30,17 +35,25 @@ public class RecipeController {
     public String newRecipe(Model model) {
         model.addAttribute("recipe", new RecipeCommand());
 
-        return "recipe/recipeform";
+        return RECIPE_RECEIPEFORM_URL;
     }
 
     @GetMapping("/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model) {
         model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
-        return "recipe/recipeform";
+        return RECIPE_RECEIPEFORM_URL;
     }
 
     @PostMapping("")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
+    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(objectError -> {
+                System.out.println("LOGGING: " + objectError.toString());
+            });
+
+            return RECIPE_RECEIPEFORM_URL;
+        }
+
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
 
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
