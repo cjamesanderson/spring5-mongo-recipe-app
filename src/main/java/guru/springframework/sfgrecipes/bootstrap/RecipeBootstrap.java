@@ -5,18 +5,20 @@ import guru.springframework.sfgrecipes.repositories.CategoryRepository;
 import guru.springframework.sfgrecipes.repositories.RecipeRepository;
 import guru.springframework.sfgrecipes.repositories.UnitOfMeasureRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
 @Component
-public class DataLoader implements CommandLineRunner {
+@Profile("default")
+public class RecipeBootstrap implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final RecipeRepository recipeRepository;
 
-    public DataLoader(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository, RecipeRepository recipeRepository) {
+    public RecipeBootstrap(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository, RecipeRepository recipeRepository) {
         this.categoryRepository = categoryRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
         this.recipeRepository = recipeRepository;
