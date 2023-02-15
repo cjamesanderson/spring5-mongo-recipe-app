@@ -44,15 +44,15 @@ class RecipeServiceImplTest {
     @Test
     void getRecipeByIdTest() throws Exception {
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        recipe.setId("1");
         Optional<Recipe> recipeOptional = Optional.of(recipe);
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
-        Recipe recipeReturned = recipeService.findById(1L);
+        Recipe recipeReturned = recipeService.findById("1");
 
         assertNotNull("Null recipe returned", recipeReturned);
-        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).findById(anyString());
         verify(recipeRepository, never()).findAll();
     }
 
@@ -74,20 +74,20 @@ class RecipeServiceImplTest {
     @Test
     void testDeleteById() throws Exception {
 
-        Long idToDelete = 2L;
+        String idToDelete = "2";
 
         recipeService.deleteById(idToDelete);
 
-        verify(recipeRepository, times(1)).deleteById(anyLong());
+        verify(recipeRepository, times(1)).deleteById(anyString());
     }
 
     @Test
     void testGetRecipeIdNotFound() throws Exception {
-        Long recipeId = 1L;
+        String recipeId = "1";
 
         Optional<Recipe> recipeOptional = Optional.empty();
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
         NotFoundException thrown = assertThrows(NotFoundException.class,
                 () -> recipeService.findById(recipeId), "Expected NotFoundException not thrown.");

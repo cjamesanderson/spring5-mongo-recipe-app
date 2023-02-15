@@ -1,18 +1,14 @@
 package guru.springframework.sfgrecipes.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 
 @Entity
 public class Notes {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @OneToOne
     private Recipe recipe;
 
-    @Lob
     private String recipeNotes;
 
     public Notes() {}
@@ -21,11 +17,11 @@ public class Notes {
         this.recipeNotes = recipeNotes;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public Notes setId(Long id) {
+    public Notes setId(String id) {
         this.id = id;
         return this;
     }

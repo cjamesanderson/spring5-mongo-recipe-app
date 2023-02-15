@@ -7,18 +7,15 @@ import guru.springframework.sfgrecipes.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Spliterators;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,9 +38,9 @@ class UnitOfMeasureServiceImplTest {
     void listAllUoms() {
         //given
         Set<UnitOfMeasure> uomSet = new HashSet<>();
-        uomSet.add(new UnitOfMeasure().setId(1L));
-        uomSet.add(new UnitOfMeasure().setId(2L));
-        uomSet.add(new UnitOfMeasure().setId(3L));
+        uomSet.add(new UnitOfMeasure().setId("1"));
+        uomSet.add(new UnitOfMeasure().setId("2"));
+        uomSet.add(new UnitOfMeasure().setId("3"));
         when(unitOfMeasureRepository.findAll()).thenReturn(uomSet);
 
         //when

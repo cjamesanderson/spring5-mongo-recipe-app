@@ -1,23 +1,15 @@
 package guru.springframework.sfgrecipes.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
 public class UnitOfMeasure {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String description;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public UnitOfMeasure setId(Long id) {
+    public UnitOfMeasure setId(String id) {
         this.id = id;
         return this;
     }

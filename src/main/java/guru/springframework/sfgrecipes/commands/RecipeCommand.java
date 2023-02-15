@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class RecipeCommand {
-    private Long id;
+    private String id;
     @NotBlank
     @Size(min = 3, max = 255)
     private String description;
@@ -40,11 +40,11 @@ public class RecipeCommand {
     private Difficulty difficulty;
     private Set<CategoryCommand> categories = new HashSet<>();
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public RecipeCommand setId(Long id) {
+    public RecipeCommand setId(String id) {
         this.id = id;
         return this;
     }

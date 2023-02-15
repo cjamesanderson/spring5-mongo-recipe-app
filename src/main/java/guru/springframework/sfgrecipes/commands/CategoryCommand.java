@@ -4,16 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CategoryCommand {
-    private Long id;
+    private String id;
     private String description;
 
     private Set<RecipeCommand> recipes = new HashSet<>();
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public CategoryCommand setId(Long id) {
+    public CategoryCommand setId(String id) {
         this.id = id;
         return this;
     }

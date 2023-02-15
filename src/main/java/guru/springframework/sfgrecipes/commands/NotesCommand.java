@@ -1,15 +1,15 @@
 package guru.springframework.sfgrecipes.commands;
 
 public class NotesCommand {
-    private Long id;
+    private String id;
     private RecipeCommand recipe;
     private String recipeNotes;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public NotesCommand setId(Long id) {
+    public NotesCommand setId(String id) {
         this.id = id;
         return this;
     }

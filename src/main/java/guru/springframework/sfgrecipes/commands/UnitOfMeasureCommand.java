@@ -1,14 +1,14 @@
 package guru.springframework.sfgrecipes.commands;
 
 public class UnitOfMeasureCommand {
-    private Long id;
+    private String id;
     private String description;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public UnitOfMeasureCommand setId(Long id) {
+    public UnitOfMeasureCommand setId(String id) {
         this.id = id;
         return this;
     }

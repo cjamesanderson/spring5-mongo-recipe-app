@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,14 +34,14 @@ class ImageServiceImplTest {
     @Test
     void testSaveImageFile() throws IOException {
         //given
-        Long id = 1L;
+        String id = "1";
         MultipartFile multipartFile = new MockMultipartFile("imagefile", "testing.txt", "" +
                 "text/plain", "Test Imaga Data".getBytes());
 
         Recipe recipe = new Recipe().setId(id);
         Optional<Recipe> recipeOptional = Optional.of(recipe);
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
         ArgumentCaptor<Recipe> argumentCaptor = ArgumentCaptor.forClass(Recipe.class);
 

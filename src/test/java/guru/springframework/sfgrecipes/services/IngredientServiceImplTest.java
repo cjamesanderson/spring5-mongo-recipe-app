@@ -23,16 +23,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class IngredientServiceImplTest {
 
-    private static final Long RECIPE_ID = 1L;
-    private static final Long ING_ID = 2L;
-    private static final Long OLD_UOM_ID = 3L;
-    private static final Long NEW_UOM_ID = 4L;
+    private static final String RECIPE_ID = "1";
+    private static final String ING_ID = "2";
+    private static final String OLD_UOM_ID = "3";
+    private static final String NEW_UOM_ID = "4";
     private static final String OLD_DESC = "old description";
     private static final String NEW_DESC = "new description";
 
@@ -61,9 +60,9 @@ class IngredientServiceImplTest {
         //given
         Recipe recipe = new Recipe().setId(RECIPE_ID);
         recipe.addIngredient(new Ingredient().setId(ING_ID));
-        recipe.addIngredient(new Ingredient().setId(3L));
+        recipe.addIngredient(new Ingredient().setId("3"));
         Optional<Recipe> recipeOptional = Optional.of(recipe);
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
         //when
         IngredientCommand command = service.findByRecipeIdAndIngredientId(RECIPE_ID, ING_ID);
@@ -101,9 +100,9 @@ class IngredientServiceImplTest {
                 .setUom(uomCommand);
         Optional<Recipe> recipeOptional = Optional.of(recipe);
         Optional<UnitOfMeasure> uomOptional = Optional.of(newUom);
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
         when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
-        when(unitOfMeasureRepository.findById(anyLong())).thenReturn(uomOptional);
+        when(unitOfMeasureRepository.findById(anyString())).thenReturn(uomOptional);
 
         //when
         IngredientCommand savedIngredient = service.saveIngredientCommand(command);
@@ -112,9 +111,9 @@ class IngredientServiceImplTest {
         assertNotNull(savedIngredient);
         assertEquals(NEW_DESC, savedIngredient.getDescription());
         assertEquals(NEW_DESC, savedIngredient.getUom().getDescription());
-        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).findById(anyString());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
-        verify(unitOfMeasureRepository, times(1)).findById(anyLong());
+        verify(unitOfMeasureRepository, times(1)).findById(anyString());
     }
 
     @Test
@@ -122,7 +121,7 @@ class IngredientServiceImplTest {
         //given
         Recipe recipe = new Recipe().setId(RECIPE_ID);
         IngredientCommand ingredientCommand = new IngredientCommand().setId(ING_ID).setRecipeId(RECIPE_ID);
-        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        when(recipeRepository.findById(anyString())).thenReturn(Optional.of(recipe));
         when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
 
         //when
@@ -132,7 +131,7 @@ class IngredientServiceImplTest {
         assertNotNull(savedIngredient);
         assertEquals(savedIngredient.getId(), ING_ID);
         assertEquals(savedIngredient.getRecipeId(), RECIPE_ID);
-        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).findById(anyString());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
     }
 
@@ -142,13 +141,13 @@ class IngredientServiceImplTest {
         Recipe recipe = new Recipe().setId(RECIPE_ID);
         Ingredient ingredient = new Ingredient().setId(ING_ID);
         recipe.addIngredient(ingredient);
-        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        when(recipeRepository.findById(anyString())).thenReturn(Optional.of(recipe));
 
         //when
         service.deleteByRecipeIdAndIngredientId(RECIPE_ID, ING_ID);
 
         //then
-        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).findById(anyString());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
     }
 

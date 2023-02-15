@@ -1,19 +1,13 @@
 package guru.springframework.sfgrecipes.domain;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
 public class Ingredient {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String description;
     private BigDecimal amount;
-    @ManyToOne
     private Recipe recipe;
-    @OneToOne(fetch = FetchType.EAGER)
     private UnitOfMeasure uom;
 
     public Ingredient() {
@@ -25,11 +19,11 @@ public class Ingredient {
         this.uom = uom;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public Ingredient setId(Long id) {
+    public Ingredient setId(String id) {
         this.id = id;
         return this;
     }
