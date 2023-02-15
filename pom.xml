@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>guru.springframeword</groupId>
-    <artifactId>spring5-recipe-app</artifactId>
+    <artifactId>spring5-mongo-recipe-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>sfg-recipes</name>
     <description>sfg-recipes</description>
