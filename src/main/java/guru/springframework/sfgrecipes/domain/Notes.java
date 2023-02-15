@@ -1,8 +1,6 @@
 package guru.springframework.sfgrecipes.domain;
 
-import javax.persistence.Entity;
 
-@Entity
 public class Notes {
 
     private String id;
