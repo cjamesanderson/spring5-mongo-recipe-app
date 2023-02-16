@@ -1,10 +1,16 @@
 package guru.springframework.sfgrecipes.domain;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.HashSet;
 import java.util.Set;
 
+@Document
 public class Recipe {
 
+    @Id
     private String id;
 
     private String description;
@@ -20,6 +26,7 @@ public class Recipe {
     private Notes notes;
     private Difficulty difficulty;
 
+    @DBRef
     private Set<Category> categories = new HashSet<>();
 
     public String getId() {
@@ -117,8 +124,10 @@ public class Recipe {
     }
 
     public Recipe setNotes(Notes notes) {
-        this.notes = notes;
-        if (notes != null) notes.setRecipe(this);
+        if (notes != null) {
+            this.notes = notes;
+            //notes.setRecipe(this);
+        }
         return this;
     }
 
@@ -141,7 +150,7 @@ public class Recipe {
     }
 
     public Recipe addIngredient(Ingredient ingredient) {
-        ingredient.setRecipe(this);
+        //ingredient.setRecipe(this);
         ingredients.add(ingredient);
         return this;
     }

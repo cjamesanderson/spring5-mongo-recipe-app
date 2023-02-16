@@ -29,6 +29,43 @@ public class RecipeBootstrap implements CommandLineRunner {
 
         System.out.print("Loading data from bootstrap...");
 
+        if (categoryRepository.count() == 0) {
+            System.out.println("LOGGING: Loading Categories");
+            loadCategories();
+        }
+        if (unitOfMeasureRepository.count() == 0) {
+            System.out.println("LOGGING: Loading UOMs");
+            loadUom();
+        }
+        if (recipeRepository.count() == 0) {
+            System.out.println("LOGGING: Loading Recipes");
+            loadRecipes();
+        }
+
+        System.out.println("loaded");
+
+    }
+
+    private void loadCategories() {
+        categoryRepository.save(new Category().setDescription("American"));
+        categoryRepository.save(new Category().setDescription("Italian"));
+        categoryRepository.save(new Category().setDescription("Mexican"));
+        categoryRepository.save(new Category().setDescription("Fast Food"));
+    }
+
+    private void loadUom() {
+        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Teaspoon"));
+        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Tablespoon"));
+        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Cup"));
+        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Pinch"));
+        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Ounce"));
+        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Clove"));
+        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Each"));
+        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Pint"));
+    }
+
+    private void loadRecipes() {
+
         //load units of measure
         if (unitOfMeasureRepository.findByDescription("Tablespoon").isEmpty() ||
                 unitOfMeasureRepository.findByDescription("Teaspoon").isEmpty() ||
@@ -172,8 +209,5 @@ public class RecipeBootstrap implements CommandLineRunner {
         bestGuacamole.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
 
         recipeRepository.save(bestGuacamole);
-
-        System.out.println("loaded");
-
     }
 }

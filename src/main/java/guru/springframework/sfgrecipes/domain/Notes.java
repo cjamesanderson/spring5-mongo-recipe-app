@@ -1,11 +1,12 @@
 package guru.springframework.sfgrecipes.domain;
 
 
+import org.springframework.data.annotation.Id;
+
 public class Notes {
 
+    @Id
     private String id;
-
-    private Recipe recipe;
 
     private String recipeNotes;
 
@@ -21,15 +22,6 @@ public class Notes {
 
     public Notes setId(String id) {
         this.id = id;
-        return this;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public Notes setRecipe(Recipe recipe) {
-        this.recipe = recipe;
         return this;
     }
 

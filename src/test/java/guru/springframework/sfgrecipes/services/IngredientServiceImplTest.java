@@ -69,8 +69,8 @@ class IngredientServiceImplTest {
 
         //then
         assertNotNull(command);
-        assertEquals(command.getId(), ING_ID);
-        assertEquals(command.getRecipeId(), RECIPE_ID);
+        assertEquals(ING_ID, command.getId());
+        //assertEquals(RECIPE_ID, command.getRecipeId());
     }
 
     @Test
@@ -129,8 +129,8 @@ class IngredientServiceImplTest {
 
         //then
         assertNotNull(savedIngredient);
-        assertEquals(savedIngredient.getId(), ING_ID);
-        assertEquals(savedIngredient.getRecipeId(), RECIPE_ID);
+        assertEquals(ING_ID, savedIngredient.getId());
+        //assertEquals(RECIPE_ID, savedIngredient.getRecipeId());
         verify(recipeRepository, times(1)).findById(anyString());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
     }

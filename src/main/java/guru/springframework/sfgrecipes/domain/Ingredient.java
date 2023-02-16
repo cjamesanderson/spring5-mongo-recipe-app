@@ -1,13 +1,17 @@
 package guru.springframework.sfgrecipes.domain;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class Ingredient {
 
-    private String id;
+    private String id = UUID.randomUUID().toString();
     private String description;
     private BigDecimal amount;
-    private Recipe recipe;
+
+    @DBRef
     private UnitOfMeasure uom;
 
     public Ingredient() {
@@ -43,15 +47,6 @@ public class Ingredient {
 
     public Ingredient setAmount(BigDecimal amount) {
         this.amount = amount;
-        return this;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public Ingredient setRecipe(Recipe recipe) {
-        this.recipe = recipe;
         return this;
     }
 

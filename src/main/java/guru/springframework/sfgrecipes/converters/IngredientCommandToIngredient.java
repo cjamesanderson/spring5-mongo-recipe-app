@@ -20,7 +20,6 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
     public Ingredient convert(IngredientCommand source) {
         if (source == null) return null;
 
-        //todo: implement recipe parameter conversion
         return new Ingredient()
                 .setId(source.getId())
                 .setDescription(source.getDescription())

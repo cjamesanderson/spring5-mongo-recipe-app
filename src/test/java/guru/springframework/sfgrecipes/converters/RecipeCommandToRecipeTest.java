@@ -9,8 +9,8 @@ import guru.springframework.sfgrecipes.domain.Recipe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,14 +68,14 @@ class RecipeCommandToRecipeTest {
         NotesCommand notesCommand = new NotesCommand().setId(NOTES_ID);
         command.setNotes(notesCommand);
 
-        Set<IngredientCommand> ingredientCommands = new HashSet<>();
+        List<IngredientCommand> ingredientCommands = new ArrayList<>();
         ingredientCommands.add(new IngredientCommand().setId(INGREDIENT_ID_1));
         ingredientCommands.add(new IngredientCommand().setId(INGREDIENT_ID_2));
         command.setIngredients(ingredientCommands);
 
         CategoryCommand categoryCommand1 = new CategoryCommand().setId(CATEGORY_ID_1);
         CategoryCommand categoryCommand2 = new CategoryCommand().setId(CATEGORY_ID_2);
-        Set<CategoryCommand> categoryCommands = new HashSet<>();
+        List<CategoryCommand> categoryCommands = new ArrayList<>();
         categoryCommands.add(categoryCommand1);
         categoryCommands.add(categoryCommand2);
         command.setCategories(categoryCommands);

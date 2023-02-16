@@ -35,6 +35,7 @@ public class IngredientServiceImpl implements IngredientService{
 
         if (recipeOptional.isEmpty()) {
             // todo: impl error handling
+            System.out.println("LOGGING: Recipe not found! ID: " + recipeId);
         }
 
         Recipe recipe = recipeOptional.get();
@@ -45,9 +46,13 @@ public class IngredientServiceImpl implements IngredientService{
 
         if (ingredientCommandOptional.isEmpty()) {
             // todo: impl error handling
+            System.out.println("LOGGING: Ingredient not found! ID: " + ingredientId);
         }
 
-        return ingredientCommandOptional.get();
+        IngredientCommand ingredientCommand = ingredientCommandOptional.get();
+        ingredientCommand.setRecipeId(recipeId);
+
+        return ingredientCommand;
     }
 
     @Override
@@ -57,6 +62,7 @@ public class IngredientServiceImpl implements IngredientService{
 
         if (recipeOptional.isEmpty()) {
             //todo: toss error if not found!
+            System.out.println("LOGGING: Recipe not found! ID: " + command.getRecipeId());
             return new IngredientCommand();
         } else {
             Recipe recipe = recipeOptional.get();
@@ -68,7 +74,6 @@ public class IngredientServiceImpl implements IngredientService{
             if (ingredientOptional.isEmpty()) {
                 //add new ingredient
                 Ingredient ingredientNew = ingredientCommandToIngredient.convert(command);
-                ingredientNew.setRecipe(recipe);
                 recipe.addIngredient(ingredientNew);
             } else {
                 Ingredient ingredientFound = ingredientOptional.get();
@@ -95,7 +100,10 @@ public class IngredientServiceImpl implements IngredientService{
             }
 
             //todo: check for fail
-            return ingredientToIngredientCommand.convert(ingredientOptionalSaved.get());
+            IngredientCommand ingredientCommandSaved = ingredientToIngredientCommand.convert(ingredientOptionalSaved.get());
+            ingredientCommandSaved.setRecipeId(recipe.getId());
+
+            return ingredientCommandSaved;
         }
     }
 
@@ -114,7 +122,6 @@ public class IngredientServiceImpl implements IngredientService{
                 //todo: implement error handling
             } else {
                 Ingredient ingredient = ingredientOptional.get();
-                ingredient.setRecipe(null);
                 recipe.getIngredients().remove(ingredient);
                 recipeRepository.save(recipe);
             }

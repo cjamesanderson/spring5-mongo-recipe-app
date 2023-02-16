@@ -26,7 +26,7 @@ public class RecipeController {
 
     @GetMapping("/{id}/show")
     public String showById(@PathVariable String id, Model model) {
-        Long.valueOf(id); //generate number format exception for bad id
+        //Long.valueOf(id); //generate number format exception for bad id
         model.addAttribute("recipe", recipeService.findById(id));
 
         return "recipe/show";
