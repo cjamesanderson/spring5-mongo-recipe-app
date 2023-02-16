@@ -44,7 +44,6 @@ public class ImageController {
 
     @GetMapping("/recipe/{id}/recipeimage")
     public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) throws IOException {
-        Long.valueOf(id); //generate number format exception for bad id
         RecipeCommand command = recipeService.findCommandById(id);
 
         if (command.getImage() == null) return;
