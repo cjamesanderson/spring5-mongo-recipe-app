@@ -29,21 +29,31 @@ jobs:
 
       - restore_cache:
           keys:
-            - spring5-mongo-recipe-app-{{ checksum "pom.xml" }}
-            - vi-dependencies-
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
 
-      - run: mvn dependency:go-offline
+      - run: gradle dependencies
 
       - save_cache:
           paths:
             - ~/.m2
-          key: spring5-mongo-recipe-app-{{ checksum "pom.xml" }}
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # Then run your tests!
-      - run: mvn -B test
+      - run: ./gradlew clean test jacocoTestReport
+
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p /junit/
+            find . -type f -regex "."/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+          when: always
 
       - store_test_results:
-          path: target/surefire-reports
+          path: ~/junit
+
+      - store_artifacts:
+          path: ~/junit
 
       - codecov/upload
 
