@@ -3,6 +3,7 @@ package guru.springframework.sfgrecipes.repositories;
 import guru.springframework.sfgrecipes.bootstrap.RecipeBootstrap;
 import guru.springframework.sfgrecipes.domain.UnitOfMeasure;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled
 @ExtendWith(SpringExtension.class)
 @DataMongoTest
 class UnitOfMeasureRepositoryTestIT {

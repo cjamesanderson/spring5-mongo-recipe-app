@@ -4,12 +4,18 @@ import guru.springframework.sfgrecipes.domain.*;
 import guru.springframework.sfgrecipes.repositories.CategoryRepository;
 import guru.springframework.sfgrecipes.repositories.RecipeRepository;
 import guru.springframework.sfgrecipes.repositories.UnitOfMeasureRepository;
+import guru.springframework.sfgrecipes.repositories.reactive.CategoryReactiveRepository;
+import guru.springframework.sfgrecipes.repositories.reactive.RecipeReactiveRepository;
+import guru.springframework.sfgrecipes.repositories.reactive.UnitOfMeasureReactiveRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Slf4j
 @Component
 @Profile("default")
 public class RecipeBootstrap implements CommandLineRunner {
@@ -17,6 +23,16 @@ public class RecipeBootstrap implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final RecipeRepository recipeRepository;
+
+    @Autowired
+    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
+
+    @Autowired
+    CategoryReactiveRepository categoryReactiveRepository;
+
+    @Autowired
+    RecipeReactiveRepository recipeReactiveRepository;
+
 
     public RecipeBootstrap(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository, RecipeRepository recipeRepository) {
         this.categoryRepository = categoryRepository;
@@ -43,6 +59,13 @@ public class RecipeBootstrap implements CommandLineRunner {
         }
 
         System.out.println("loaded");
+
+        log.error("########");
+        log.error(unitOfMeasureReactiveRepository.count().block().toString());
+        log.error("########");
+        log.error(categoryReactiveRepository.count().block().toString());
+        log.error("########");
+        log.error(recipeReactiveRepository.count().block().toString());
 
     }
 
