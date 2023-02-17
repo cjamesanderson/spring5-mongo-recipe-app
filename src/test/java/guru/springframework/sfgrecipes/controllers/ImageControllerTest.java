@@ -4,7 +4,6 @@ import guru.springframework.sfgrecipes.commands.RecipeCommand;
 import guru.springframework.sfgrecipes.services.ImageService;
 import guru.springframework.sfgrecipes.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -95,13 +94,5 @@ class ImageControllerTest {
         byte[] responseBytes = response.getContentAsByteArray();
 
         assertEquals(s.getBytes().length, responseBytes.length);
-    }
-
-    @Test
-    @Disabled //invalid for MongoDB ids
-    public void testGetImageNumberFormatException() throws Exception {
-        mockMvc.perform(get("/recipe/asdf/recipeimage"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("400error"));
     }
 }

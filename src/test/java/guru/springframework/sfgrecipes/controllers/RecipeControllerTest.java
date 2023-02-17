@@ -5,7 +5,6 @@ import guru.springframework.sfgrecipes.domain.Recipe;
 import guru.springframework.sfgrecipes.exceptions.NotFoundException;
 import guru.springframework.sfgrecipes.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -123,15 +122,5 @@ class RecipeControllerTest {
         mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name("404error"));
-    }
-
-    @Test
-    @Disabled
-    // invalid for mongoDB ids
-    void testGetRecipeNumberFormatException() throws Exception {
-
-        mockMvc.perform(get("/recipe/asdf/show"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("400error"));
     }
 }

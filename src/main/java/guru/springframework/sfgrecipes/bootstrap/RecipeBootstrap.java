@@ -60,13 +60,6 @@ public class RecipeBootstrap implements CommandLineRunner {
 
         System.out.println("loaded");
 
-        log.error("########");
-        log.error(unitOfMeasureReactiveRepository.count().block().toString());
-        log.error("########");
-        log.error(categoryReactiveRepository.count().block().toString());
-        log.error("########");
-        log.error(recipeReactiveRepository.count().block().toString());
-
     }
 
     private void loadCategories() {
