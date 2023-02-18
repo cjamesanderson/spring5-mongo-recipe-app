@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -63,8 +64,8 @@ class IngredientControllerTest {
     @Test
     void testShowIngredient() throws Exception {
         //given
-        IngredientCommand command = new IngredientCommand();
-        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(command);
+        Mono<IngredientCommand> commandMono = Mono.just(new IngredientCommand());
+        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(commandMono);
 
         //when
         mockMvc.perform(get("/recipe/1/ingredient/1/show"))
@@ -99,7 +100,7 @@ class IngredientControllerTest {
                 new UnitOfMeasureCommand().setId("1"),
                 new UnitOfMeasureCommand().setId("2"),
                 new UnitOfMeasureCommand().setId("3"));
-        IngredientCommand ingredient = new IngredientCommand().setId("1");
+        Mono<IngredientCommand> ingredient = Mono.just(new IngredientCommand().setId("1"));
 
         //when
         when(unitOfMeasureService.listAllUoms()).thenReturn(uomFlux);
@@ -117,7 +118,7 @@ class IngredientControllerTest {
     @Test
     void testSaveOrUpdate() throws Exception {
         //given
-        IngredientCommand ingredientCommand = new IngredientCommand().setId("1").setRecipeId("2");
+        Mono<IngredientCommand> ingredientCommand = Mono.just(new IngredientCommand().setId("1").setRecipeId("2"));
 
         //when
         when(ingredientService.saveIngredientCommand(any())).thenReturn(ingredientCommand);
@@ -134,6 +135,8 @@ class IngredientControllerTest {
 
     @Test
     void testDelete() throws Exception {
+        when(ingredientService.deleteByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(Mono.empty());
+
         mockMvc.perform(get("/recipe/1/ingredient/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/1/ingredients"));
