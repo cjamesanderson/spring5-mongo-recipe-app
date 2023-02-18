@@ -15,9 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.HashSet;
-import java.util.Set;
+import reactor.core.publisher.Flux;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -82,7 +80,7 @@ class IngredientControllerTest {
 
         //when
         when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just());
 
         //then
         mockMvc.perform(get("/recipe/1/ingredient/new"))
@@ -97,14 +95,14 @@ class IngredientControllerTest {
     @Test
     void testUpdateIngredientForm() throws Exception {
         //given
-        Set<UnitOfMeasureCommand> uoms = new HashSet<>();
-        uoms.add(new UnitOfMeasureCommand().setId("1"));
-        uoms.add(new UnitOfMeasureCommand().setId("2"));
-        uoms.add(new UnitOfMeasureCommand().setId("3"));
+        Flux<UnitOfMeasureCommand> uomFlux = Flux.just(
+                new UnitOfMeasureCommand().setId("1"),
+                new UnitOfMeasureCommand().setId("2"),
+                new UnitOfMeasureCommand().setId("3"));
         IngredientCommand ingredient = new IngredientCommand().setId("1");
 
         //when
-        when(unitOfMeasureService.listAllUoms()).thenReturn(uoms);
+        when(unitOfMeasureService.listAllUoms()).thenReturn(uomFlux);
         when(ingredientService.findByRecipeIdAndIngredientId(anyString(),anyString())).thenReturn(ingredient);
 
         //then

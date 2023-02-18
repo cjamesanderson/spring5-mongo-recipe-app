@@ -1,14 +1,10 @@
 package guru.springframework.sfgrecipes.bootstrap;
 
 import guru.springframework.sfgrecipes.domain.*;
-import guru.springframework.sfgrecipes.repositories.CategoryRepository;
-import guru.springframework.sfgrecipes.repositories.RecipeRepository;
-import guru.springframework.sfgrecipes.repositories.UnitOfMeasureRepository;
 import guru.springframework.sfgrecipes.repositories.reactive.CategoryReactiveRepository;
 import guru.springframework.sfgrecipes.repositories.reactive.RecipeReactiveRepository;
 import guru.springframework.sfgrecipes.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -20,24 +16,14 @@ import java.math.BigDecimal;
 @Profile("default")
 public class RecipeBootstrap implements CommandLineRunner {
 
-    private final CategoryRepository categoryRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
-    private final RecipeRepository recipeRepository;
+    private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
+    private final CategoryReactiveRepository categoryReactiveRepository;
+    private final RecipeReactiveRepository recipeReactiveRepository;
 
-    @Autowired
-    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
-
-    @Autowired
-    CategoryReactiveRepository categoryReactiveRepository;
-
-    @Autowired
-    RecipeReactiveRepository recipeReactiveRepository;
-
-
-    public RecipeBootstrap(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository, RecipeRepository recipeRepository) {
-        this.categoryRepository = categoryRepository;
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
-        this.recipeRepository = recipeRepository;
+    public RecipeBootstrap(UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository, CategoryReactiveRepository categoryReactiveRepository, RecipeReactiveRepository recipeReactiveRepository) {
+        this.unitOfMeasureReactiveRepository = unitOfMeasureReactiveRepository;
+        this.categoryReactiveRepository = categoryReactiveRepository;
+        this.recipeReactiveRepository = recipeReactiveRepository;
     }
 
     @Override
@@ -45,15 +31,20 @@ public class RecipeBootstrap implements CommandLineRunner {
 
         System.out.print("Loading data from bootstrap...");
 
-        if (categoryRepository.count() == 0) {
+        // todo: handle initialization more gracefully
+        categoryReactiveRepository.deleteAll().block();
+        unitOfMeasureReactiveRepository.deleteAll().block();
+        recipeReactiveRepository.deleteAll().block();
+
+        if (categoryReactiveRepository.count().block() == 0) {
             System.out.println("LOGGING: Loading Categories");
             loadCategories();
         }
-        if (unitOfMeasureRepository.count() == 0) {
+        if (unitOfMeasureReactiveRepository.count().block() == 0) {
             System.out.println("LOGGING: Loading UOMs");
             loadUom();
         }
-        if (recipeRepository.count() == 0) {
+        if (recipeReactiveRepository.count().block() == 0) {
             System.out.println("LOGGING: Loading Recipes");
             loadRecipes();
         }
@@ -63,50 +54,50 @@ public class RecipeBootstrap implements CommandLineRunner {
     }
 
     private void loadCategories() {
-        categoryRepository.save(new Category().setDescription("American"));
-        categoryRepository.save(new Category().setDescription("Italian"));
-        categoryRepository.save(new Category().setDescription("Mexican"));
-        categoryRepository.save(new Category().setDescription("Fast Food"));
+        categoryReactiveRepository.save(new Category().setDescription("American")).block();
+        categoryReactiveRepository.save(new Category().setDescription("Italian")).block();
+        categoryReactiveRepository.save(new Category().setDescription("Mexican")).block();
+        categoryReactiveRepository.save(new Category().setDescription("Fast Food")).block();
     }
 
     private void loadUom() {
-        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Teaspoon"));
-        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Tablespoon"));
-        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Cup"));
-        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Pinch"));
-        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Ounce"));
-        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Clove"));
-        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Each"));
-        unitOfMeasureRepository.save(new UnitOfMeasure().setDescription("Pint"));
+        unitOfMeasureReactiveRepository.save(new UnitOfMeasure().setDescription("Teaspoon")).block();
+        unitOfMeasureReactiveRepository.save(new UnitOfMeasure().setDescription("Tablespoon")).block();
+        unitOfMeasureReactiveRepository.save(new UnitOfMeasure().setDescription("Cup")).block();
+        unitOfMeasureReactiveRepository.save(new UnitOfMeasure().setDescription("Pinch")).block();
+        unitOfMeasureReactiveRepository.save(new UnitOfMeasure().setDescription("Ounce")).block();
+        unitOfMeasureReactiveRepository.save(new UnitOfMeasure().setDescription("Clove")).block();
+        unitOfMeasureReactiveRepository.save(new UnitOfMeasure().setDescription("Each")).block();
+        unitOfMeasureReactiveRepository.save(new UnitOfMeasure().setDescription("Pint")).block();
     }
 
     private void loadRecipes() {
 
         //load units of measure
-        if (unitOfMeasureRepository.findByDescription("Tablespoon").isEmpty() ||
-                unitOfMeasureRepository.findByDescription("Teaspoon").isEmpty() ||
-                unitOfMeasureRepository.findByDescription("Clove").isEmpty() ||
-                unitOfMeasureRepository.findByDescription("Each").isEmpty() ||
-                unitOfMeasureRepository.findByDescription("Cup").isEmpty() ||
-                unitOfMeasureRepository.findByDescription("Pint").isEmpty() ||
-                unitOfMeasureRepository.findByDescription("Pinch").isEmpty())
-            throw new RuntimeException("Expected UOM not found");
+//        if (unitOfMeasureReactiveRepository.findByDescription("Tablespoon").isEmpty() ||
+//                unitOfMeasureReactiveRepository.findByDescription("Teaspoon").isEmpty() ||
+//                unitOfMeasureReactiveRepository.findByDescription("Clove").isEmpty() ||
+//                unitOfMeasureReactiveRepository.findByDescription("Each").isEmpty() ||
+//                unitOfMeasureReactiveRepository.findByDescription("Cup").isEmpty() ||
+//                unitOfMeasureReactiveRepository.findByDescription("Pint").isEmpty() ||
+//                unitOfMeasureReactiveRepository.findByDescription("Pinch").isEmpty())
+//            throw new RuntimeException("Expected UOM not found");
 
-        UnitOfMeasure tablespoon = unitOfMeasureRepository.findByDescription("Tablespoon").get();
-        UnitOfMeasure teaspoon = unitOfMeasureRepository.findByDescription("Teaspoon").get();
-        UnitOfMeasure clove = unitOfMeasureRepository.findByDescription("Clove").get();
-        UnitOfMeasure each = unitOfMeasureRepository.findByDescription("Each").get();
-        UnitOfMeasure cup = unitOfMeasureRepository.findByDescription("Cup").get();
-        UnitOfMeasure pint = unitOfMeasureRepository.findByDescription("Pint").get();
-        UnitOfMeasure pinch = unitOfMeasureRepository.findByDescription("Pinch").get();
+        UnitOfMeasure tablespoon = unitOfMeasureReactiveRepository.findByDescription("Tablespoon").block();
+        UnitOfMeasure teaspoon = unitOfMeasureReactiveRepository.findByDescription("Teaspoon").block();
+        UnitOfMeasure clove = unitOfMeasureReactiveRepository.findByDescription("Clove").block();
+        UnitOfMeasure each = unitOfMeasureReactiveRepository.findByDescription("Each").block();
+        UnitOfMeasure cup = unitOfMeasureReactiveRepository.findByDescription("Cup").block();
+        UnitOfMeasure pint = unitOfMeasureReactiveRepository.findByDescription("Pint").block();
+        UnitOfMeasure pinch = unitOfMeasureReactiveRepository.findByDescription("Pinch").block();
 
         //load categories
-        if (categoryRepository.findByDescription("American").isEmpty() ||
-            categoryRepository.findByDescription("Mexican").isEmpty())
-            throw new RuntimeException("Expected category not found");
+//        if (categoryReactiveRepository.findByDescription("American").isEmpty() ||
+//            categoryReactiveRepository.findByDescription("Mexican").isEmpty())
+//            throw new RuntimeException("Expected category not found");
 
-        Category americanCategory = categoryRepository.findByDescription("American").get();
-        Category mexicanCategory = categoryRepository.findByDescription("Mexican").get();
+        Category americanCategory = categoryReactiveRepository.findByDescription("American").block();
+        Category mexicanCategory = categoryReactiveRepository.findByDescription("Mexican").block();
 
         //begin first recipe
         Recipe spicyGrilledChickenTacos = new Recipe();
@@ -170,7 +161,7 @@ public class RecipeBootstrap implements CommandLineRunner {
         spicyGrilledChickenTacos.setSource("Simple Recipes");
         spicyGrilledChickenTacos.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
 
-        recipeRepository.save(spicyGrilledChickenTacos);
+        recipeReactiveRepository.save(spicyGrilledChickenTacos).block();
 
         //begin second test recipe
         Recipe bestGuacamole = new Recipe();
@@ -224,6 +215,6 @@ public class RecipeBootstrap implements CommandLineRunner {
         bestGuacamole.setSource("Simply Recipes");
         bestGuacamole.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
 
-        recipeRepository.save(bestGuacamole);
+        recipeReactiveRepository.save(bestGuacamole).block();
     }
 }
