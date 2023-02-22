@@ -5,63 +5,63 @@ import guru.springframework.sfgrecipes.converters.RecipeCommandToRecipe;
 import guru.springframework.sfgrecipes.converters.RecipeToRecipeCommand;
 import guru.springframework.sfgrecipes.domain.Recipe;
 import guru.springframework.sfgrecipes.exceptions.NotFoundException;
-import guru.springframework.sfgrecipes.repositories.RecipeRepository;
+import guru.springframework.sfgrecipes.repositories.reactive.RecipeReactiveRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 @Service
 public class RecipeServiceImpl implements RecipeService{
 
-    private final RecipeRepository recipeRepository;
+    private final RecipeReactiveRepository recipeReactiveRepository;
     private final RecipeToRecipeCommand recipeToRecipeCommand;
     private final RecipeCommandToRecipe recipeCommandToRecipe;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeToRecipeCommand recipeToRecipeCommand, RecipeCommandToRecipe recipeCommandToRecipe) {
-        this.recipeRepository = recipeRepository;
+    public RecipeServiceImpl(RecipeReactiveRepository recipeReactiveRepository, RecipeToRecipeCommand recipeToRecipeCommand, RecipeCommandToRecipe recipeCommandToRecipe) {
+        this.recipeReactiveRepository = recipeReactiveRepository;
         this.recipeToRecipeCommand = recipeToRecipeCommand;
         this.recipeCommandToRecipe = recipeCommandToRecipe;
     }
 
-    public Set<Recipe> getRecipes() {
-        Set<Recipe> recipes = new HashSet<>();
-        recipeRepository.findAll().iterator().forEachRemaining(recipes::add);
-        return recipes;
+    public Flux<Recipe> getRecipes() {
+        return recipeReactiveRepository.findAll();
     }
 
     @Override
-    public Recipe findById(String id) {
+    public Mono<Recipe> findById(String id) {
 
-        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
-
-        if (recipeOptional.isEmpty()) {
-            throw new NotFoundException("Recipe Not Found. For ID value: " + id);
-        }
-
-        return recipeOptional.get();
+        return recipeReactiveRepository.findById(id).map((recipe) -> {
+            if (recipe == null) {
+                throw new NotFoundException("Recipe Not Found. For ID value: " + id);
+            }
+            return recipe;
+        });
     }
 
     @Override
-    @Transactional
-    public RecipeCommand saveRecipeCommand(RecipeCommand command) {
-        Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
-
-        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
-        return recipeToRecipeCommand.convert(savedRecipe);
+    public Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command) {
+        return recipeReactiveRepository.save(recipeCommandToRecipe.convert(command))
+                .map(recipeToRecipeCommand::convert);
     }
 
     @Override
-    @Transactional
-    public RecipeCommand findCommandById(String id) {
-        return recipeToRecipeCommand.convert(findById(id));
+    public Mono<RecipeCommand> findCommandById(String id) {
+        return recipeReactiveRepository.findById(id)
+                .map(recipe -> {
+                    RecipeCommand recipeCommand = recipeToRecipeCommand.convert(recipe);
+
+                    recipeCommand.getIngredients().forEach(rc -> {
+                        rc.setRecipeId(recipeCommand.getId());
+                    });
+
+                    return recipeCommand;
+                });
     }
 
     @Override
-    public void deleteById(String id) {
-        recipeRepository.deleteById(id);
+    public Mono<Void> deleteById(String id) {
+        recipeReactiveRepository.deleteById(id).subscribe();
+        return Mono.empty();
     }
 }

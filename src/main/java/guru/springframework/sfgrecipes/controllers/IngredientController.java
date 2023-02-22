@@ -32,7 +32,7 @@ public class IngredientController {
 
     @GetMapping("/recipe/{id}/ingredients")
     public String listIngredients(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(id));
+        model.addAttribute("recipe", recipeService.findCommandById(id).block());
 
         return "recipe/ingredient/list";
     }
@@ -49,7 +49,7 @@ public class IngredientController {
 
         //make sure we have a good id value
         //todo: raise exception if null
-        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
+        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
 
         //need to return back parent id for hidden for property
         IngredientCommand ingredientCommand = new IngredientCommand();
