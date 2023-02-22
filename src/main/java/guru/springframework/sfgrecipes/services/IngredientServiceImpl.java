@@ -71,7 +71,6 @@ public class IngredientServiceImpl implements IngredientService{
                 ingredientFound.setAmount(command.getAmount());
                 ingredientFound.setUom(unitOfMeasureReactiveRepository
                         .findById(command.getUom().getId()).block());
-                        //.orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); //todo address this
                 if (ingredientFound.getUom() == null) {
                     throw new RuntimeException("UOM NOT FOUND");
                 }
@@ -102,18 +101,24 @@ public class IngredientServiceImpl implements IngredientService{
 
     @Override
     public Mono<Void> deleteByRecipeIdAndIngredientId(String recipeId, String id) {
+        log.debug("Deleting ingredient: " + recipeId + ":" + id);
         Optional<Recipe> recipeOptional = recipeReactiveRepository.findById(recipeId).blockOptional();
 
         if (recipeOptional.isEmpty()) {
             //todo: implement error handling
+            log.debug("Recipe Id not found. Id: " + recipeId);
         } else {
+            log.debug("Found recipe");
+
             Recipe recipe = recipeOptional.get();
             Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
                     .filter(ingredient -> ingredient.getId().equals(id))
                     .findFirst();
             if (ingredientOptional.isEmpty()) {
+                log.debug("Ingredient not found. Id: " + id);
                 //todo: implement error handling
             } else {
+                log.debug("Found ingredient");
                 Ingredient ingredient = ingredientOptional.get();
                 recipe.getIngredients().remove(ingredient);
                 recipeReactiveRepository.save(recipe).block();
