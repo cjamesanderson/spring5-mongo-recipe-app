@@ -1,51 +1,76 @@
 package guru.springframework.sfgrecipes.services;
 
 import guru.springframework.sfgrecipes.domain.Recipe;
-import guru.springframework.sfgrecipes.repositories.RecipeRepository;
+import guru.springframework.sfgrecipes.repositories.reactive.RecipeReactiveRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Service
 public class ImageServiceImpl implements ImageService {
 
-    private final RecipeRepository recipeRepository;
+    private final RecipeReactiveRepository recipeReactiveRepository;
 
-    public ImageServiceImpl(RecipeRepository recipeRepository) {
-        this.recipeRepository = recipeRepository;
+    public ImageServiceImpl(RecipeReactiveRepository recipeReactiveRepository) {
+        this.recipeReactiveRepository = recipeReactiveRepository;
     }
 
     @Override
-    @Transactional
-    public void saveImageFile(String recipeId, MultipartFile file) {
-        try {
-            Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
-            if (recipeOptional.isPresent()) {
-                Recipe recipe = recipeOptional.get();
+    public Mono<Void> saveImageFile(String recipeId, MultipartFile file) {
 
-                Byte[] byteObjects = new Byte[file.getBytes().length];
+        Mono<Recipe> recipeMono = recipeReactiveRepository.findById(recipeId)
+                .map(recipe -> {
+                    Byte[] bytesObjects = new Byte[0];
+                    try {
+                        bytesObjects = new Byte[file.getBytes().length];
 
-                int i = 0;
+                        int i = 0;
 
-                for (byte b : file.getBytes()) {
-                    byteObjects[i++] = b;
-                }
+                        for (byte b : file.getBytes()) {
+                            bytesObjects[i++] = b;
+                        }
 
-                recipe.setImage(byteObjects);
+                        recipe.setImage(bytesObjects);
 
-                recipeRepository.save(recipe);
-            } else {
-                //todo: error handling
-                System.out.println("LOGGING: Recipe not found: ID - " + recipeId);
-            }
-        } catch (IOException e) {
-            //todo: error handling
-            System.out.println("LOGGING: Error occurred: " + e);
+                        return recipe;
 
-            e.printStackTrace();
-        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+        recipeReactiveRepository.save(recipeMono.block()).block();
+
+        return Mono.empty();
+
+//        try {
+//            Optional<Recipe> recipeOptional = recipeReactiveRepository.findById(recipeId).blockOptional();
+//            if (recipeOptional.isPresent()) {
+//                Recipe recipe = recipeOptional.get();
+//
+//                Byte[] byteObjects = new Byte[file.getBytes().length];
+//
+//                int i = 0;
+//
+//                for (byte b : file.getBytes()) {
+//                    byteObjects[i++] = b;
+//                }
+//
+//                recipe.setImage(byteObjects);
+//
+//                recipeReactiveRepository.save(recipe).block();
+//            } else {
+//                //todo: error handling
+//                System.out.println("LOGGING: Recipe not found: ID - " + recipeId);
+//            }
+//        } catch (IOException e) {
+//            //todo: error handling
+//            System.out.println("LOGGING: Error occurred: " + e);
+//
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 }
