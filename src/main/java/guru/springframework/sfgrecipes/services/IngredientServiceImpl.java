@@ -35,40 +35,14 @@ public class IngredientServiceImpl implements IngredientService{
     public Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
 
         return recipeReactiveRepository.findById(recipeId)
-                .map(recipe -> recipe.getIngredients()
-                        .stream()
-                        .filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
-                        .findFirst())
-                .filter(Optional::isPresent)
+                .flatMapIterable(Recipe::getIngredients)
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .single()
                 .map(ingredient -> {
-                    IngredientCommand command = ingredientToIngredientCommand.convert(ingredient.get());
+                    IngredientCommand command = ingredientToIngredientCommand.convert(ingredient);
                     command.setRecipeId(recipeId);
                     return command;
                 });
-
-//        Optional<Recipe> recipeOptional = recipeReactiveRepository.findById(recipeId).blockOptional();
-//
-//        if (recipeOptional.isEmpty()) {
-//            // todo: impl error handling
-//            log.error("Recipe not found! ID: " + recipeId);
-//        }
-//
-//        Recipe recipe = recipeOptional.get();
-//
-//        Optional<IngredientCommand> ingredientCommandOptional = recipe.getIngredients().stream()
-//                .filter(ingredient -> ingredient.getId().equals(ingredientId))
-//                .map(ingredientToIngredientCommand::convert).findFirst();
-//
-//        if (ingredientCommandOptional.isEmpty()) {
-//            // todo: impl error handling
-//            log.error("Ingredient not found! ID: " + ingredientId);
-//        }
-//
-//        // enhance command object with ingredient id
-//        IngredientCommand ingredientCommand = ingredientCommandOptional.get();
-//        ingredientCommand.setRecipeId(recipeId);
-//
-//        return Mono.just(ingredientCommand);
     }
 
     @Override
